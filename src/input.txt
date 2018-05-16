@@ -1,0 +1,23 @@
+7
+650
+night train
+23 30
+6 45
+morning dew
+06 50
+15 25
+lunch express
+11 00
+18 00
+lunch express
+11 00
+18 00
+lunch express
+11 00
+18 00
+lunch express
+11 00
+18 00
+lunch express
+11 00
+18 00
