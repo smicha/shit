@@ -1,8 +1,13 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by smicha on 5/16/18.
@@ -11,78 +16,11 @@ import java.util.Scanner;
 
 public class TrainSort {
 
-    //inner class for demo purposes
-    class Train {
-        String trainName;
-        Date departure;
-        Date arrival;
-        Duration duration;
 
-        public Train(String trainName, Date departure, Date arrival, Duration duration) {
-            this.trainName = trainName;
-            this.departure = departure;
-            this.arrival = arrival;
-            this.duration = duration;
-        }
 
-        public String getTrainName() {
-            return trainName;
-        }
+    public static void main(String[] args) throws FileNotFoundException,ParseException {
 
-        public void setTrainName(String trainName) {
-            this.trainName = trainName;
-        }
-
-        public Date getDeparture() {
-            return departure;
-        }
-
-        public void setDeparture(Date departure) {
-            this.departure = departure;
-        }
-
-        public Date getArrival() {
-            return arrival;
-        }
-
-        public void setArrival(Date arrival) {
-            this.arrival = arrival;
-        }
-
-        public Duration getDuration() {
-            return duration;
-        }
-
-        public void setDuration(Duration duration) {
-            this.duration = duration;
-        }
-
-        //dont worry about the equals and hashcode  methods for now .
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            Train train = (Train) o;
-
-            if (trainName != null ? !trainName.equals(train.trainName) : train.trainName != null) return false;
-            if (departure != null ? !departure.equals(train.departure) : train.departure != null) return false;
-            if (arrival != null ? !arrival.equals(train.arrival) : train.arrival != null) return false;
-            return duration != null ? duration.equals(train.duration) : train.duration == null;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = trainName != null ? trainName.hashCode() : 0;
-            result = 31 * result + (departure != null ? departure.hashCode() : 0);
-            result = 31 * result + (arrival != null ? arrival.hashCode() : 0);
-            result = 31 * result + (duration != null ? duration.hashCode() : 0);
-            return result;
-        }
-    }
-
-    public static void main(String[] args) throws FileNotFoundException {
-
+        TrainSort trainSort = new TrainSort();
         File file =
                 new File("input.txt");
         Scanner sc = new Scanner(file);
@@ -97,10 +35,69 @@ public class TrainSort {
         Train[] trains = new Train[numberofTrains];
 
        //load train info into the array
+        Integer trainIndex = 0 ;
+        Integer trainDelimiterIndex = 0;
+        while (trainIndex < numberofTrains){
 
-        while (sc.hasNextLine())
-            System.out.println(sc.nextLine());
+            trains[trainIndex] = new Train();
+
+            try {
+                //load train name
+                trains[trainIndex].setTrainName(sc.nextLine());
+
+                DateFormat formatter = new SimpleDateFormat("hh mm");
+                //load arrival time
+                Date arrivalTime = (Date) formatter.parse(sc.nextLine());
+                trains[trainIndex].setArrival(arrivalTime);
+
+                //departure time
+                Date departureTime = (Date) formatter.parse(sc.nextLine());
+                trains[trainIndex].setDeparture(departureTime);
+
+                trains[trainIndex].setDuration(trainSort.getDuration(departureTime,arrivalTime));
+                System.out.println(trains[trainIndex].toString());
+
+                trainDelimiterIndex++;
+
+                if (trainDelimiterIndex == 3) {
+                    trainIndex++;
+                    trainDelimiterIndex = 0;
+                    continue;
+                }
+            }
+            catch(NoSuchElementException nse)
+            {
+                System.out.println("End of file ");
+                break;
+            }
 
 
+        }
+
+
+
+
+   }
+
+   private Duration getDuration(Date start ,Date end)
+   {
+
+       //TODO : This is a dummy function . clean it up . make it work  . Explore other options !!!!
+
+       //TODO : Handle overnight train logic
+
+       long diffInMilliseconds = Math.abs(end.getTime() - start.getTime());
+
+       Duration duration = Duration.ofMillis(diffInMilliseconds);
+       return duration;
+
+   }
+
+   private Train getFastestTrain (Train []trains)
+   {
+
+       //TODO: sort array based on duration
+       //TODO : return quickest train
+       return null;
    }
 }
